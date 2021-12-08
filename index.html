@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spot the Same Pictures</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css?after">
+</head>
+
+<body>
+  <div class="wrap">
+    <div id="content_wrap">
+      <p>같은 그림 찾기</p>
+      <div id="btn_wrap">
+        <button>시작하기</button>
+        <button>그만하기</button>
+        <button>일시정지</button>
+        <button>다시시작</button>
+        <button>다시섞기</button>
+      </div>
+      <div class="board">
+        <p class="scoreWrap">Score : <span id="score">0</span>
+        </p>
+        <p id="playCount">준비</p>
+        <p class="playTimeWrap">제한시간 : <span id="playTime"></span>초</p>
+      </div>
+      <div class="play_wrap">
+        <div id="cards">
+          <p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요.</p>
+        </div>
+        <table id="scoreBoard"></table>
+      </div>
+    </div>
+  </div>
+  <script src="js/common.js"></script>
+</body>
+
+</html>

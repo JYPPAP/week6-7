@@ -1,0 +1,194 @@
+@charset "utf-8";
+
+.wrap {
+  width: 100%;
+  height: 100%;
+}
+
+#content_wrap {
+  width: 1200px;
+  height: 900px;
+  margin: 10px auto;
+
+}
+
+/* 위치 */
+p {
+  text-align: center;
+}
+
+#btn_wrap {
+  text-align: center;
+
+  button {
+    display: none;
+    padding: 10px;
+    margin: 10px;
+
+    &:first-child {
+      display: inline-block;
+    }
+  }
+}
+
+.board {
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+}
+
+.scoreWrap {
+  color: blue;
+  text-align: center;
+}
+
+#playCount {
+  margin-top: 10px;
+  // display: none;
+}
+
+.playTimeWrap {
+  display: none;
+  margin-top: 10px;
+}
+
+
+.play_wrap {
+  margin-top: 20px;
+
+  &:after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+}
+
+/* 같은그림 출력 창 */
+#cards {
+  float: left;
+  width: 800px;
+  height: 800px;
+  border: 1px solid #000;
+
+  &:after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+
+  #playInfo {
+    display: block;
+    font-size: 20px;
+    line-height: 800px;
+    text-align: center;
+  }
+
+  .card {
+    position: relative;
+    display: none;
+    float: left;
+    width: 25%;
+    height: 25%;
+    cursor: pointer;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    box-sizing: border-box;
+
+    /* 하단 중복 선 제거 */
+    &:nth-child(13),
+    &:nth-child(14),
+    &:nth-child(15),
+    &:nth-child(16) {
+      border-bottom: none;
+    }
+
+    /* 우측 중복 선 제거 */
+    &:nth-child(1),
+    &:nth-child(5),
+    &:nth-child(9),
+    &:nth-child(13) {
+      border-left: none;
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      font-size: 100px;
+      line-height: 200px;
+      text-align: center;
+      /* 테스트 종료 후 .5초나 .3초로 증가시키기. */
+      transition: 0.3s;
+      backface-visibility: hidden;
+    }
+
+    /* 이미지를 겹쳐놓고 클래스가 부여되었을 때, 출력하는 형태로 제작해야 할 것 같음. */
+    .face_front {
+      transform: rotateY(0deg);
+      user-select: none;
+
+    }
+
+    .face_back {
+      overflow: hidden;
+      background: no-repeat center;
+      transform: rotateY(-180deg);
+    }
+
+    &.active .face_front {
+      transform: rotateY(180deg);
+    }
+
+    &.active .face_back {
+      transform: rotateY(0deg);
+    }
+
+    .face_front.active {
+      transform: rotateY(180deg);
+    }
+
+    .face_front.active+.face_back {
+      transform: rotateY(0deg);
+    }
+
+    .face_front.clear {
+      transform: rotateY(180deg);
+    }
+
+    .face_front.clear+.face_back {
+      transform: rotateY(0deg);
+    }
+  }
+}
+
+/* Score 출력 창 */
+#scoreBoard {
+  display: inline-block;
+  width: 400px;
+  height: 500px;
+  padding-left: 20px;
+  overflow: hidden scroll;
+
+  tr {
+    display: block;
+    width: 360px;
+    margin: 0 5px 5px 0;
+    border: 1px solid #000;
+
+    th,
+    td {
+      display: inline-block;
+      width: 100px;
+      padding: 5px 0;
+      overflow: hidden;
+      font-size: 15px;
+      text-align: center;
+      border-left: 1px solid #000;
+
+      &:first-child {
+        width: 140px;
+        border-left: none;
+      }
+    }
+  }
+}
