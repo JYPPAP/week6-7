@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var pauseBtn = button[2];
   var restartBtn = button[3];
   var mixBtn = button[4];
-  var btnArray = [];
 
   var score = doc.getElementById("score");
   var playCount = doc.getElementById("playCount");
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   startBtn.onclick = function () {
     /* 버튼 숨기고 보여주기 */
-    btnArray = [0, 1, 1, 0, 1];
+    var btnArray = [false, true, true, false, false];
     showBtn(btnArray);
     for (var i = 0; i < card.length; i++) {
       card[i].style.display = "block";
@@ -81,16 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.status === 200) {
         parseValue = JSON.parse(xhr.responseText);
         playTime.textContent = parseValue.time;
-{        /* parseValue를 반환해서 사용하기. */
-        // console.log(parseValue.images);
-        // for (var i = 0; i < parseValue.images.length * 2; i++) {
-        //   backFace[i].style.backgroundImage = "url(../" + parseValue.images[(i % 8)] + ")";
-        // }
-        // console.log("Work1");
-}
+
         setImage();
         mixImage();
         showCount();
+
         return parseValue;
       } else {
         console.log("[" + xhr.status + "] : " + xhr.statusText);
@@ -115,36 +109,38 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function setImage() {
-    /* 이 부분은 ajax로 옮기기? */
     var imageUrl = parseValue.images;
     var setFrame = "";
     for (var i = 0; i < imageUrl.length * 2; i++) {
-      setFrame += '<div class="card">\n<div class="face face_front">?</div>\n<div class="face face_back" style="background-image: url(' + imageUrl[(i % 8)] + ')"></div>\n</div>\n';
+      setFrame += '<div class="card"><div class="face face_front">?</div><div class="face face_back" style="background-image: url(' + imageUrl[(i % 8)] + ');"></div></div>';
     }
-    console.log(setFrame);
     cards.innerHTML = setFrame;
   }
 
   /* 랜덤 배치 */
   function mixImage() {
-    array = shuffle(mixArray);
+    shuffle(mixArray);
     var mixCard = "";
-    for (var i = 0; i < array.length; i++) {
-      mixCard += card[array[i]].innerHTML;
+    for (var i = 0; i < mixArray.length; i++) {
+      faceHtml = card[mixArray[i]].innerHTML;
+      mixCard += '<div class="card active">' + faceHtml + '</div>'
     }
-    // console.log("######################");
-    // console.log("######################");
-    // console.log("mixCard");
-    // console.log(mixCard);
+
+    cards.innerHTML = mixCard;
+    console.log("####  mix  ####");
+    // console.log(cards.innerHTML);
     showImage();
   }
 
   function showImage() {
-
+    console.log("showImage");
+    console.log(card.length);
     for (var i = 0; i < card.length; i++) {
       card[i].className = "card active";
+      card[i].style.display = "block";
       console.log(card[i].className);
       setTimeout(function () {
+        // console.log(cards.innerHTML);
         for (var i = 0; i < card.length; i++) {
           card[i].className = "card";
         }
@@ -158,16 +154,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   }
+  var clickCount = 0;
+  var prevImage = "";
+  var checkFlag = false;
+  var gameCount;
 
   cards.addEventListener("click", function (e) {
-    var clickCount;
-    var prevImage;
-    var checkFlag;
-    var gameCount;
+
     var target = e.target;
     var targetImage = target.nextElementSibling;
 
-    /* 이미지 3장 이상 클릭 방지 */
     if (clickCount === 2) return;
 
     if (target.className === "face face_front") {
@@ -175,7 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       return;
     }
-    if (!isNaN(gameCount)) gameCount = 0;
+
+    if (isNaN(gameCount)) gameCount = 0;
 
     var targetNumber = targetImage.style.backgroundImage;
     if (clickCount === 1) {
@@ -184,16 +181,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (targetNumber === prevNumber) {
         score.textContent = Number(score.textContent) + 10;
-
+        gameCount++;
+        console.log("");
+        console.log("gameCount");
+        console.log(gameCount);
         setTimeout(function () {
           target.className = "face face_front clear";
           prevImage.previousElementSibling.className = "face face_front clear";
           clickCount = 0;
         }, 500);
-        gameCount++;
+
       } else {
-        // console.log("두 이미지가 다를 때  실행될 코드");
         score.textContent = Number(score.textContent) - 5;
+
         setTimeout(function () {
           for (var i = 0; i < frontFace.length; i++) {
             frontFace[i].className = frontFace[i].className !== "face face_front clear" ? "face face_front" : "face face_front clear";
@@ -204,33 +204,31 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       if (gameCount === 8) {
         gameCount = 0;
-        console.log("Game End !!!!");
         gameEnd();
       }
+
       return clickCount, checkFlag, gameCount;
     } else {
       // console.log("첫 번째 클릭일 때 실행될 코드");
       clickCount = 1;
       prevImage = targetImage;
       /* 두 번째 클릭에서 기존 prev를 가지고 있어도 첫 번째 클릭으로 새로운 값이 덮어써지기 때문에 문제는 없다. */
-      console.log(card[0].innerHTML);
       return clickCount, prevImage;
     }
   });
 
   function gameEnd() {
-    var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "");
-    // playTime.textContent = 40;
-    // score.textContent = 120;
-    var endScore = (Number(score.textContent) + Number(playTime.textContent)) + "점";
-    var endTime = playTime.textContent + "초";
-    console.log(typeof (endName));
+    /* prompt로 이름을 입력받는 부분을 값이 없을 때 계속 호출될 수 있도록 만들기. */
+    var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "익명");
 
-    // var parseName = (/[\w|ㄱ-ㅎ|가-힣|][^\,]/g).test(endName);
+    var endScore = (Number(score.textContent) + Number(playTime.textContent)) + "점";
+    var endTime = (Number(parseValue.time) - Number(playTime.textContent)) + "초";
+
+
     if (endName === "" || endName === null) {
-      endName = prompt("이름을 입력하지 않았습니다.\n이름을 입력해주시기 바랍니다.\n(콤마 , )제외", "");
+      endName = prompt("이름을 입력하지 않았습니다.\n이름을 입력해주시기 바랍니다.\n(콤마 , )제외", "익명");
       if (endName === "" || endName === null) {
-        return;
+        endName = "익명"
       }
     }
     var tempItem = localStorage.getItem("score");
@@ -248,6 +246,9 @@ document.addEventListener("DOMContentLoaded", function () {
     scoreBoard.innerHTML = "";
     setScoreBoard();
 
+    var btnArray = [true, false, false, false, false];
+    showBtn(btnArray);
+
   }
   // gameEnd();
 
@@ -263,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
   ##################*/
   function showBtn(array) {
     for (var i = 0; i < array.length; i++) {
-      if (array[i] === 1) {
+      if (array[i]) {
         button[i].style.display = "inline";
       } else {
         button[i].style.display = "none";
@@ -271,12 +272,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-
-
   function showCount() {
     var timeCount = 3;
-    playCount.textContent = timeCount;
-
+    playCount.style.display = "block";
+    playTimeWrap.style.display = "none";
     for (var i = 0; i < 4; i++) {
       var timeCount = 3;
       setTimeout(function () {
@@ -286,15 +285,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }, (i * 1000));
     }
   }
+
   var intervalTime;
 
   function startCount() {
-    console.log("Count START !!!!!");
-
-
     playCount.style.display = "none";
     playTimeWrap.style.display = "block";
-
+    mixBtn.style.display = "inline";
     intervalTime = setInterval(changeTime, 1000);
   }
 
@@ -302,8 +299,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var time = Number(playTime.textContent);
     time--;
     playTime.textContent = time;
-    console.log(time);
-    console.log(playTime.textContent);
     if (time < 1) {
       gameEnd();
       clearInterval(intervalTime);
@@ -311,19 +306,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   stopBtn.onclick = function () {
     /* 게임을 종료하고 초기화면으로 돌아가기. */
-    btnArray = [1, 0, 0, 0, 0];
+    var btnArray = [true, false, false, false, false];
     showBtn(btnArray);
-    for (var i = 0; i < buttons.length; i++) {
-      button[i].style.display = "none";
+
+    for (var i = 0; i < card.length; i++) {
+      card[i].style.display = "none";
     }
-    startBtn.style.display = "inline";
+    playInfo.style.display = "block";
+    playCount.style.display = "block";
+    playCount.textContent = "준비";
+    playTimeWrap.style.display = "none";
+
+    clearInterval(intervalTime);
+
     /* 일단 임시로 새로고침할 수 있도록 작성함. */
-    location.reload();
+    // location.reload();
   };
 
   pauseBtn.onclick = function () {
     /* 다시시작 버튼 노출 */
-    btnArray = [0, 1, 0, 1, 0];
+    var btnArray = [false, true, false, true, false];
     showBtn(btnArray);
     /* 타이머 중지, 모든 게임 동작이 중지 */
     cards.style.visibility = "hidden";
@@ -331,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   restartBtn.onclick = function () {
-    btnArray = [0, 1, 1, 0, 1];
+    var btnArray = [false, true, true, false, true];
     showBtn(btnArray);
     /* 타이머가 재동작하며, 게임을 다시 시작할 수 있다. */
     cards.style.visibility = "visible";
@@ -341,8 +343,9 @@ document.addEventListener("DOMContentLoaded", function () {
   mixBtn.onclick = function () {
     /* Score에서 -5점 차감, 이미 찾은 카드를 제외한 나머지 카드들을 재배치 */
     score.textContent = Number(score.textContent) - 5;
+    mixBtn.style.display = "none";
     clearInterval(intervalTime);
-    shuffle(basicArray);
+    shuffle(mixArray);
     /* 재배치된 카드를 3초간 보여준 후 다시 뒤집는다. */
     mixImage();
     showCount();

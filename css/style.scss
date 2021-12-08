@@ -44,14 +44,12 @@ p {
 
 #playCount {
   margin-top: 10px;
-  // display: none;
 }
 
 .playTimeWrap {
   display: none;
   margin-top: 10px;
 }
-
 
 .play_wrap {
   margin-top: 20px;
@@ -117,12 +115,10 @@ p {
       font-size: 100px;
       line-height: 200px;
       text-align: center;
-      /* 테스트 종료 후 .5초나 .3초로 증가시키기. */
       transition: 0.3s;
       backface-visibility: hidden;
     }
 
-    /* 이미지를 겹쳐놓고 클래스가 부여되었을 때, 출력하는 형태로 제작해야 할 것 같음. */
     .face_front {
       transform: rotateY(0deg);
       user-select: none;
