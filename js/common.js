@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var cards = doc.getElementById("cards");
   var card = cards.getElementsByClassName("card");
   var frontFace = cards.getElementsByClassName("face_front");
-  var backFace = cards.getElementsByClassName("face_back");
+  // var backFace = cards.getElementsByClassName("face_back");
   var playInfo = doc.getElementById("playInfo");
   // 점수관련 변수
   var parseValue;
@@ -31,25 +31,28 @@ document.addEventListener("DOMContentLoaded", function () {
   // localStorage.clear();
   function setScoreBoard() {
     var scoreItem = localStorage.getItem("score");
-    var scoreHeader = "<tr><th>이름</th><th>Score</th><th>소요시간</th></tr>"
-    console.log(scoreItem);
+    var scoreText = "<div><span>이름</span><span>Score</span><span>소요시간</span></div>";
+
     if (typeof (scoreItem) === "string") {
       var splitScore = scoreItem.split(/\,/g);
 
       if ((splitScore.length % 3) === 0) {
         var total = splitScore.length / 3;
-        var scoreText = "";
+
 
         for (var i = 0; i < total; i++) {
-          scoreText += "<tr><td>" + splitScore[(i * 3)] + "</td><td>" + splitScore[(i * 3) + 1] + "</td><td>" + splitScore[(i * 3) + 2] + "</td></tr>"
+          scoreText += "<div><span>" + splitScore[(i * 3)] + "</span><span>" + splitScore[(i * 3) + 1] + "</span><span>" + splitScore[(i * 3) + 2] + "</span></div>";
         }
-        scoreBoard.innerHTML = scoreHeader + scoreText;
+        console.log(scoreItem);
+        scoreBoard.innerHTML = scoreText;
 
       } else {
-        console.log("가져온 값에 오류가 있습니다.");
+        alert("가져온 값에 오류가 있습니다.");
+        alert("기록을 초기화 합니다.");
+        localStorage.clear(score);
       }
     } else {
-      scoreBoard.innerHTML = scoreHeader;
+      scoreBoard.innerHTML = scoreText;
       console.log("저장된 score가 없음.");
     }
   };
@@ -140,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
       card[i].style.display = "block";
       console.log(card[i].className);
       setTimeout(function () {
-        // console.log(cards.innerHTML);
         for (var i = 0; i < card.length; i++) {
           card[i].className = "card";
         }
@@ -219,11 +221,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function gameEnd() {
     /* prompt로 이름을 입력받는 부분을 값이 없을 때 계속 호출될 수 있도록 만들기. */
-    var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "익명");
-
+    clearInterval(intervalTime);
+    playCount.style.display = 'block';
+    playTimeWrap.style.display = 'none';
     var endScore = (Number(score.textContent) + Number(playTime.textContent)) + "점";
     var endTime = (Number(parseValue.time) - Number(playTime.textContent)) + "초";
+    playCount.textContent = "총 Score는 " + endScore + "(" + score.textContent + "+" + playTime.textContent + ") 입니다.";
+    score.textContent = 0;
 
+    var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "익명");
 
     if (endName === "" || endName === null) {
       endName = prompt("이름을 입력하지 않았습니다.\n이름을 입력해주시기 바랍니다.\n(콤마 , )제외", "익명");
@@ -248,6 +254,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btnArray = [true, false, false, false, false];
     showBtn(btnArray);
+
+
 
   }
   // gameEnd();
@@ -276,12 +284,19 @@ document.addEventListener("DOMContentLoaded", function () {
     var timeCount = 3;
     playCount.style.display = "block";
     playTimeWrap.style.display = "none";
+
+    var btnArray = [false, false, false, false, false];
+    showBtn(btnArray);
     for (var i = 0; i < 4; i++) {
       var timeCount = 3;
       setTimeout(function () {
         playCount.textContent = timeCount;
         timeCount--;
-        if (timeCount < 0) startCount();
+        if (timeCount < 0) {
+          var btnArray = [false, true, true, false, true];
+          showBtn(btnArray);
+          startCount();
+        }
       }, (i * 1000));
     }
   }
@@ -300,8 +315,9 @@ document.addEventListener("DOMContentLoaded", function () {
     time--;
     playTime.textContent = time;
     if (time < 1) {
-      gameEnd();
       clearInterval(intervalTime);
+      gameEnd();
+      return;
     }
   }
   stopBtn.onclick = function () {
@@ -312,15 +328,14 @@ document.addEventListener("DOMContentLoaded", function () {
     for (var i = 0; i < card.length; i++) {
       card[i].style.display = "none";
     }
-    playInfo.style.display = "block";
+    cards.style.visibility = "visible";
+    cards.innerHTML = '<p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요</p>';
     playCount.style.display = "block";
     playCount.textContent = "준비";
     playTimeWrap.style.display = "none";
+    score.textContent = 0;
 
     clearInterval(intervalTime);
-
-    /* 일단 임시로 새로고침할 수 있도록 작성함. */
-    // location.reload();
   };
 
   pauseBtn.onclick = function () {

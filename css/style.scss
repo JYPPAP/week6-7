@@ -19,6 +19,7 @@ p {
 
 #btn_wrap {
   text-align: center;
+  height: 60px;
 
   button {
     display: none;
@@ -40,6 +41,7 @@ p {
 .scoreWrap {
   color: blue;
   text-align: center;
+  font-weight: bold;
 }
 
 #playCount {
@@ -75,7 +77,6 @@ p {
   }
 
   #playInfo {
-    display: block;
     font-size: 20px;
     line-height: 800px;
     text-align: center;
@@ -165,14 +166,13 @@ p {
   padding-left: 20px;
   overflow: hidden scroll;
 
-  tr {
+  div {
     display: block;
     width: 360px;
     margin: 0 5px 5px 0;
     border: 1px solid #000;
 
-    th,
-    td {
+    span {
       display: inline-block;
       width: 100px;
       padding: 5px 0;
