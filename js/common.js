@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var cards = doc.getElementById("cards");
   var card = cards.getElementsByClassName("card");
   var frontFace = cards.getElementsByClassName("face_front");
-  // var backFace = cards.getElementsByClassName("face_back");
   var playInfo = doc.getElementById("playInfo");
-  // 점수관련 변수
   var parseValue;
   var scoreBoard = doc.getElementById("scoreBoard");
 
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
       card[i].style.display = "block";
     }
     playInfo.style.display = "none";
-
+    score.textContent = 0;
     /*##########
         AJAX
     ##########*/
@@ -205,23 +203,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
       if (gameCount === 8) {
-        gameCount = 0;
         gameEnd();
       }
 
       return clickCount, checkFlag, gameCount;
     } else {
-      // console.log("첫 번째 클릭일 때 실행될 코드");
       clickCount = 1;
       prevImage = targetImage;
-      /* 두 번째 클릭에서 기존 prev를 가지고 있어도 첫 번째 클릭으로 새로운 값이 덮어써지기 때문에 문제는 없다. */
+
       return clickCount, prevImage;
     }
   });
 
   function gameEnd() {
-    /* prompt로 이름을 입력받는 부분을 값이 없을 때 계속 호출될 수 있도록 만들기. */
     clearInterval(intervalTime);
+    gameCount = 0;
+
     playCount.style.display = 'block';
     playTimeWrap.style.display = 'none';
     var endScore = (Number(score.textContent) + Number(playTime.textContent)) + "점";
@@ -231,12 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "익명");
 
-    if (endName === "" || endName === null) {
-      endName = prompt("이름을 입력하지 않았습니다.\n이름을 입력해주시기 바랍니다.\n(콤마 , )제외", "익명");
-      if (endName === "" || endName === null) {
-        endName = "익명"
-      }
-    }
     var tempItem = localStorage.getItem("score");
     var parseName = endName.replace(/[\,]/g, "");
     var endString = parseName + "," + endScore + "," + endTime;
@@ -254,18 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btnArray = [true, false, false, false, false];
     showBtn(btnArray);
-
-
-
   }
-  // gameEnd();
-
-  /* (END) 카드를 클릭했을 때 할 동작 */
-  /* 카드게임이 끝난것을 어떻게 확인할 것인지
-  일치할 때 gameCount를 1씩 추가.
-  16이 되면 prompt 실행.
-  이름을 가져오고 score와 시간을 점수로 합산 후 score로, 시간은 따로 시간으로 저장?
-   */
 
   /*##################
       button Click
@@ -287,12 +267,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btnArray = [false, false, false, false, false];
     showBtn(btnArray);
+
     for (var i = 0; i < 4; i++) {
-      var timeCount = 3;
+      var timeCount = 4;
       setTimeout(function () {
-        playCount.textContent = timeCount;
         timeCount--;
-        if (timeCount < 0) {
+        playCount.textContent = timeCount;
+        if (timeCount === 0) {
           var btnArray = [false, true, true, false, true];
           showBtn(btnArray);
           startCount();
@@ -321,28 +302,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   stopBtn.onclick = function () {
-    /* 게임을 종료하고 초기화면으로 돌아가기. */
     var btnArray = [true, false, false, false, false];
     showBtn(btnArray);
+
+    playCount.style.display = "block";
+    playCount.textContent = "준비";
+    playTimeWrap.style.display = "none";
+    cards.style.visibility = "visible";
+    cards.innerHTML = '<p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요</p>';
 
     for (var i = 0; i < card.length; i++) {
       card[i].style.display = "none";
     }
-    cards.style.visibility = "visible";
-    cards.innerHTML = '<p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요</p>';
-    playCount.style.display = "block";
-    playCount.textContent = "준비";
-    playTimeWrap.style.display = "none";
-    score.textContent = 0;
-
     clearInterval(intervalTime);
   };
 
   pauseBtn.onclick = function () {
-    /* 다시시작 버튼 노출 */
     var btnArray = [false, true, false, true, false];
     showBtn(btnArray);
-    /* 타이머 중지, 모든 게임 동작이 중지 */
+
     cards.style.visibility = "hidden";
     clearInterval(intervalTime);
   };
@@ -350,21 +328,18 @@ document.addEventListener("DOMContentLoaded", function () {
   restartBtn.onclick = function () {
     var btnArray = [false, true, true, false, true];
     showBtn(btnArray);
-    /* 타이머가 재동작하며, 게임을 다시 시작할 수 있다. */
+
     cards.style.visibility = "visible";
     intervalTime = setInterval(changeTime, 1000);
   };
 
   mixBtn.onclick = function () {
-    /* Score에서 -5점 차감, 이미 찾은 카드를 제외한 나머지 카드들을 재배치 */
     score.textContent = Number(score.textContent) - 5;
     mixBtn.style.display = "none";
+
     clearInterval(intervalTime);
     shuffle(mixArray);
-    /* 재배치된 카드를 3초간 보여준 후 다시 뒤집는다. */
     mixImage();
     showCount();
-    /* 일시정지 중에는 실행될 수 없다. */
-    /* card[basicArray[i]]에 있는 innerHTML을 빈 문자열에 집어넣은 뒤 그 값을 한 번에 모아서 출력하기. */
   };
 });
