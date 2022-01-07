@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var pauseBtn = button[2];
   var restartBtn = button[3];
   var mixBtn = button[4];
+  var btnArray;
 
+  // 점수 출력관련 변수
   var score = doc.getElementById("score");
   var playCount = doc.getElementById("playCount");
   var playTimeWrap = doc.getElementsByClassName("playTimeWrap")[0];
@@ -18,14 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // 카드관련 변수
   var cards = doc.getElementById("cards");
   var card = cards.getElementsByClassName("card");
-  var frontFace = cards.getElementsByClassName("face_front");
-  var playInfo = doc.getElementById("playInfo");
+
   var parseValue;
   var scoreBoard = doc.getElementById("scoreBoard");
 
-  /*##################
-      LocalStorage
-  ##################*/
+  /* 스코어 보드 설정
+  로컬스토리지에 값이 있는지 확인
+    값이 있다면 
+    값을 분할 후 동작.
+  */
   // localStorage.clear();
   function setScoreBoard() {
     var scoreItem = localStorage.getItem("score");
@@ -37,28 +40,28 @@ document.addEventListener("DOMContentLoaded", function () {
       if ((splitScore.length % 3) === 0) {
         var total = splitScore.length / 3;
 
-
         for (var i = 0; i < total; i++) {
           scoreText += "<div><span>" + splitScore[(i * 3)] + "</span><span>" + splitScore[(i * 3) + 1] + "</span><span>" + splitScore[(i * 3) + 2] + "</span></div>";
         }
-        console.log(scoreItem);
+        //console.log(scoreItem);
         scoreBoard.innerHTML = scoreText;
 
       } else {
-        alert("가져온 값에 오류가 있습니다.");
-        alert("기록을 초기화 합니다.");
+        alert("가져온 값에 오류가 있습니다.\n기록을 초기화 합니다.");
         localStorage.clear(score);
       }
     } else {
       scoreBoard.innerHTML = scoreText;
-      console.log("저장된 score가 없음.");
+      //console.log("저장된 score가 없음.");
     }
   };
   setScoreBoard();
 
   startBtn.onclick = function () {
     /* 버튼 숨기고 보여주기 */
-    var btnArray = [false, true, true, false, false];
+    var playInfo = doc.getElementById("playInfo");
+
+    btnArray = [false, true, true, false, false];
     showBtn(btnArray);
     for (var i = 0; i < card.length; i++) {
       card[i].style.display = "block";
@@ -128,18 +131,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     cards.innerHTML = mixCard;
-    console.log("####  mix  ####");
+    //console.log("####  mix  ####");
     // console.log(cards.innerHTML);
     showImage();
   }
 
   function showImage() {
-    console.log("showImage");
-    console.log(card.length);
+    //console.log("showImage");
+    //console.log(card.length);
     for (var i = 0; i < card.length; i++) {
       card[i].className = "card active";
       card[i].style.display = "block";
-      console.log(card[i].className);
+      //console.log(card[i].className);
       setTimeout(function () {
         for (var i = 0; i < card.length; i++) {
           card[i].className = "card";
@@ -182,9 +185,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (targetNumber === prevNumber) {
         score.textContent = Number(score.textContent) + 10;
         gameCount++;
-        console.log("");
-        console.log("gameCount");
-        console.log(gameCount);
+        //console.log("");
+        //console.log("gameCount");
+        //console.log(gameCount);
         setTimeout(function () {
           target.className = "face face_front clear";
           prevImage.previousElementSibling.className = "face face_front clear";
@@ -193,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       } else {
         score.textContent = Number(score.textContent) - 5;
+        var frontFace = cards.getElementsByClassName("face_front");
 
         setTimeout(function () {
           for (var i = 0; i < frontFace.length; i++) {
@@ -224,10 +228,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var endScore = (Number(score.textContent) + Number(playTime.textContent)) + "점";
     var endTime = (Number(parseValue.time) - Number(playTime.textContent)) + "초";
     playCount.textContent = "총 Score는 " + endScore + "(" + score.textContent + "+" + playTime.textContent + ") 입니다.";
-    score.textContent = 0;
 
     var endName = prompt("게임이 종료되었습니다.\n이름을 입력해주세요\n(콤마 , )제외", "익명");
-
     var tempItem = localStorage.getItem("score");
     var parseName = endName.replace(/[\,]/g, "");
     var endString = parseName + "," + endScore + "," + endTime;
@@ -243,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
     scoreBoard.innerHTML = "";
     setScoreBoard();
 
-    var btnArray = [true, false, false, false, false];
+    btnArray = [true, false, false, false, false];
     showBtn(btnArray);
   }
 
@@ -265,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
     playCount.style.display = "block";
     playTimeWrap.style.display = "none";
 
-    var btnArray = [false, false, false, false, false];
+    btnArray = [false, false, false, false, false];
     showBtn(btnArray);
 
     for (var i = 0; i < 4; i++) {
@@ -274,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
         timeCount--;
         playCount.textContent = timeCount;
         if (timeCount === 0) {
-          var btnArray = [false, true, true, false, true];
+          btnArray = [false, true, true, false, true];
           showBtn(btnArray);
           startCount();
         }
@@ -302,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   stopBtn.onclick = function () {
-    var btnArray = [true, false, false, false, false];
+    btnArray = [true, false, false, false, false];
     showBtn(btnArray);
 
     playCount.style.display = "block";
@@ -310,6 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     playTimeWrap.style.display = "none";
     cards.style.visibility = "visible";
     cards.innerHTML = '<p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요</p>';
+    score.textContent = 0;
 
     for (var i = 0; i < card.length; i++) {
       card[i].style.display = "none";
@@ -318,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   pauseBtn.onclick = function () {
-    var btnArray = [false, true, false, true, false];
+    btnArray = [false, true, false, true, false];
     showBtn(btnArray);
 
     cards.style.visibility = "hidden";
@@ -326,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   restartBtn.onclick = function () {
-    var btnArray = [false, true, true, false, true];
+    btnArray = [false, true, true, false, true];
     showBtn(btnArray);
 
     cards.style.visibility = "visible";

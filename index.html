@@ -5,15 +5,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spot the Same Pictures</title>
+  <title>같은 그림 찾기</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css?after">
 </head>
 
 <body>
-  <div class="wrap">
-    <div id="content_wrap">
+  <div class="g_body">
+    <!-- ∇ 상단부 -->
+    <p class="header">
+      <!-- 타이틀 -->
       <p>같은 그림 찾기</p>
+      <!-- 버튼 -->
       <div id="btn_wrap">
         <button>시작하기</button>
         <button>그만하기</button>
@@ -21,19 +24,32 @@
         <button>다시시작</button>
         <button>다시섞기 (-5)</button>
       </div>
-      <div class="board">
-        <p class="scoreWrap">Score : <span id="score">0</span></p>
+      <!-- 스코어 출력 -->
+      <p class="scoreWrap">Score : <span id="score">0</span></p>
+      <!-- 안내 메세지 출력
+        여기에 들어갈 텍스트의 종류
+        1. 준비
+        2. 제한시간 : $$초
+        3. 
+      -->
+      <p id="play_info">준비</p>
+      <!-- ∆ 상단부 -->
+
+      <!-- ∇ 카드 출력 -->
+      <div id="cards">
+        <p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요.</p>
+      </div>
+      <!-- ∆ 카드 출력 -->
+
+      <!-- ∇ 기록 출력 -->
+      <div id="scoreBoard"></div>
+      <!-- ∆ 기록 출력 -->
+  </div>
+  <!-- <div class="board">
+        
         <p id="playCount">준비</p>
         <p class="playTimeWrap">제한시간 : <span id="playTime"></span>초</p>
-      </div>
-      <div class="play_wrap">
-        <div id="cards">
-          <p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요.</p>
-        </div>
-        <table id="scoreBoard"></table>
-      </div>
-    </div>
-  </div>
+      </div> -->
   <script src="js/common.js"></script>
 </body>
 

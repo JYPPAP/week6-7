@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+body {
+  background-color: #333;
+  color: #fff;
+}
+
 .wrap {
   width: 100%;
   height: 100%;
@@ -9,7 +14,6 @@
   width: 1200px;
   height: 900px;
   margin: 10px auto;
-
 }
 
 /* 위치 */
@@ -25,6 +29,9 @@ p {
     display: none;
     padding: 10px;
     margin: 10px;
+    color: #333;
+    background-color: #b5d692;
+    border-radius: 15%;
 
     &:first-child {
       display: inline-block;
@@ -39,7 +46,7 @@ p {
 }
 
 .scoreWrap {
-  color: blue;
+  color: #afafff;
   text-align: center;
   font-weight: bold;
 }
@@ -68,7 +75,7 @@ p {
   float: left;
   width: 800px;
   height: 800px;
-  border: 1px solid #000;
+  border: 1px solid #b5d692;
 
   &:after {
     display: block;
@@ -89,8 +96,8 @@ p {
     width: 25%;
     height: 25%;
     cursor: pointer;
-    border-bottom: 1px solid #000;
-    border-left: 1px solid #000;
+    border-bottom: 1px solid #b5d692;
+    border-left: 1px solid #b5d692;
     box-sizing: border-box;
 
     /* 하단 중복 선 제거 */
@@ -164,13 +171,13 @@ p {
   width: 400px;
   height: 500px;
   padding-left: 20px;
-  overflow: hidden scroll;
+  overflow: hidden auto;
 
   div {
     display: block;
     width: 360px;
     margin: 0 5px 5px 0;
-    border: 1px solid #000;
+    border: 1px solid #b5d692;
 
     span {
       display: inline-block;
@@ -179,7 +186,7 @@ p {
       overflow: hidden;
       font-size: 15px;
       text-align: center;
-      border-left: 1px solid #000;
+      border-left: 1px solid #b5d692;
 
       &:first-child {
         width: 140px;
