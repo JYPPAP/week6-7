@@ -12,44 +12,25 @@
 
 <body>
   <div class="g_body">
-    <!-- ∇ 상단부 -->
-    <p class="header">
-      <!-- 타이틀 -->
-      <p>같은 그림 찾기</p>
-      <!-- 버튼 -->
+    <div class="header">
+      <h2>같은 그림 찾기</h2>
       <div id="btn_wrap">
-        <button>시작하기</button>
+        <button class="active">시작하기</button>
         <button>그만하기</button>
         <button>일시정지</button>
         <button>다시시작</button>
         <button>다시섞기 (-5)</button>
       </div>
-      <!-- 스코어 출력 -->
-      <p class="scoreWrap">Score : <span id="score">0</span></p>
-      <!-- 안내 메세지 출력
-        여기에 들어갈 텍스트의 종류
-        1. 준비
-        2. 제한시간 : $$초
-        3. 
-      -->
+      <div class="game_score">Score :</div>
       <p id="play_info">준비</p>
-      <!-- ∆ 상단부 -->
-
-      <!-- ∇ 카드 출력 -->
+    </div>
+    <div class="inner">
       <div id="cards">
-        <p id="playInfo">게임을 시작하려면 시작하기 버튼을 눌러주세요.</p>
+        <p>게임을 시작하려면 시작하기 버튼을 눌러주세요.</p>
       </div>
-      <!-- ∆ 카드 출력 -->
-
-      <!-- ∇ 기록 출력 -->
-      <div id="scoreBoard"></div>
-      <!-- ∆ 기록 출력 -->
+      <div id="score_board"></div>
+    </div>
   </div>
-  <!-- <div class="board">
-        
-        <p id="playCount">준비</p>
-        <p class="playTimeWrap">제한시간 : <span id="playTime"></span>초</p>
-      </div> -->
   <script src="js/common.js"></script>
 </body>
 

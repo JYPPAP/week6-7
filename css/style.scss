@@ -1,29 +1,33 @@
 @charset "utf-8";
 
 body {
-  background-color: #333;
   color: #fff;
+  background-color: #333;
 }
 
-.wrap {
+.g_body {
   width: 100%;
   height: 100%;
+  margin-top: 10px;
 }
 
-#content_wrap {
+.header {
+  width: 400px;
+  margin: 0 auto;
+}
+.inner {
   width: 1200px;
-  height: 900px;
-  margin: 10px auto;
+  margin: 0 auto;
 }
-
-/* 위치 */
-p {
+h2 {
+  margin-bottom: 5px;
+  font-size: 20px;
   text-align: center;
 }
 
 #btn_wrap {
-  text-align: center;
   height: 60px;
+  text-align: center;
 
   button {
     display: none;
@@ -33,41 +37,32 @@ p {
     background-color: #b5d692;
     border-radius: 15%;
 
-    &:first-child {
-      display: inline-block;
+    &.active {
+      display: inline;
+    }
+
+    &.off {
+      background-color: #475737;
+      cursor: default;
+      border: 1px outset #000;
     }
   }
+
+
 }
 
-.board {
-  width: 100%;
-  height: 50px;
-  overflow: hidden;
-}
-
-.scoreWrap {
+.game_score {
+  height: 20px;
+  margin-bottom: 5px;
+  font-weight: bold;
   color: #afafff;
   text-align: center;
-  font-weight: bold;
 }
 
-#playCount {
-  margin-top: 10px;
-}
-
-.playTimeWrap {
-  display: none;
-  margin-top: 10px;
-}
-
-.play_wrap {
-  margin-top: 20px;
-
-  &:after {
-    display: block;
-    clear: both;
-    content: '';
-  }
+#play_info {
+  margin-bottom: 5px;
+  font-size: 16px;
+  text-align: center;
 }
 
 /* 같은그림 출력 창 */
@@ -83,10 +78,26 @@ p {
     content: '';
   }
 
-  #playInfo {
+  p {
     font-size: 20px;
     line-height: 800px;
     text-align: center;
+  }
+
+  &.on .card {
+    display: block;
+  }
+
+  &.off .card {
+    display: none;
+  }
+
+  &.show .face_front {
+    display: none;
+  }
+
+  &.show .face_back {
+    display: block;
   }
 
   .card {
@@ -117,56 +128,37 @@ p {
     }
 
     .face {
-      position: absolute;
       width: 100%;
       height: 100%;
       font-size: 100px;
-      line-height: 200px;
       text-align: center;
-      transition: 0.3s;
-      backface-visibility: hidden;
+      line-height: 200px;
     }
 
-    .face_front {
-      transform: rotateY(0deg);
-      user-select: none;
-
+    /* 카드 체크 / 완료 */
+    .active,
+    .clear {
+      display: none;
     }
 
-    .face_back {
-      overflow: hidden;
-      background: no-repeat center;
-      transform: rotateY(-180deg);
-    }
-
-    &.active .face_front {
-      transform: rotateY(180deg);
-    }
-
-    &.active .face_back {
-      transform: rotateY(0deg);
-    }
-
-    .face_front.active {
-      transform: rotateY(180deg);
-    }
-
-    .face_front.active+.face_back {
-      transform: rotateY(0deg);
-    }
-
-    .face_front.clear {
-      transform: rotateY(180deg);
-    }
-
-    .face_front.clear+.face_back {
-      transform: rotateY(0deg);
+    .active+.face_back,
+    .clear+.face_back {
+      display: block;
     }
   }
 }
 
+.face_front {
+  display: block;
+}
+
+.face_back {
+  display: none;
+  background: no-repeat center;
+}
+
 /* Score 출력 창 */
-#scoreBoard {
+#score_board {
   display: inline-block;
   width: 400px;
   height: 500px;
@@ -182,8 +174,9 @@ p {
     span {
       display: inline-block;
       width: 100px;
+      height: 20px;
       padding: 5px 0;
-      overflow: hidden;
+      overflow-y: hidden !important;
       font-size: 15px;
       text-align: center;
       border-left: 1px solid #b5d692;
